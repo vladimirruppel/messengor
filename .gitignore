@@ -1,0 +1,60 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Dependency directories (if you were using old GOPATH vendor style)
+# vendor/
+
+# IDE-specific files
+# VS Code
+.vscode/
+# GoLand / IntelliJ
+.idea/
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# Atom
+.atom/
+# Eclipse
+.project
+.classpath
+.settings/
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build output folder (if you decide to use one, e.g., 'build/' or 'bin/')
+/build/
+/bin/
+/dist/
+
+# Environment variables file (if you use .env files)
+.env
+.env.*
+!.env.example
+
+# Log files
+*.log
+
+# Coverage profil
+coverage.out
+coverage.html
