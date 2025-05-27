@@ -1,11 +1,18 @@
 package main
 
 import (
+	"flag"
+	"log"
+
 	"github.com/vladimirruppel/messengor/internal/client"
 )
 
-func main() {
-	var serverAddr = "localhost:8088"
+var serverAddr = flag.String("addr", "localhost:8088", "host:port of the server")
 
-	client.RunClient(serverAddr)
+func main() {
+	flag.Parse()
+	log.SetFlags(0)
+
+	app := client.NewClientApp(*serverAddr)
+	app.Run()
 }
