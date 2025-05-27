@@ -2,6 +2,7 @@ package client
 
 import (
 	"bufio"
+	"encoding/json"
 	"flag"
 	"log"
 	"net/url"
@@ -9,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/websocket"
+	"github.com/vladimirruppel/messengor/internal/protocol"
 )
 
 var addr = flag.String("addr", "localhost:8088", "http service address")
@@ -63,8 +65,33 @@ func RunClient(serverAddr string) {
 			break
 		}
 
+		// Создаем полезную нагрузку (payload) для текстового сообщения
+		textData := protocol.TextPayload{
+			Text: text,
+		}
+
+		// Сериализуем полезную нагрузку в JSON.
+		payloadBytes, err := json.Marshal(textData)
+		if err != nil {
+			log.Printf("Failed to marshal text payload: %v\n", err)
+			continue // Пропускаем отправку этого сообщения, если не смогли сериализовать payload
+		}
+
+		// Создаем "конверт" WebSocketMessage
+		wsMsg := protocol.WebSocketMessage{
+			Type:    protocol.MsgTypeText,
+			Payload: payloadBytes,
+		}
+
+		// Сериализуем весь "конверт" в JSON
+		messageBytes, err := json.Marshal(wsMsg)
+		if err != nil {
+			log.Printf("Failed to marshal WebSocket message: %v\n", err)
+			continue // Пропускаем отправку
+		}
+
 		// Отправляем текстовое сообщение на сервер
-		err := conn.WriteMessage(websocket.TextMessage, []byte(text))
+		err = conn.WriteMessage(websocket.TextMessage, messageBytes)
 		if err != nil {
 			log.Println("Write error:", err)
 			break // вероятно, потеряно соединение
