@@ -35,7 +35,7 @@ type RegisterRequestPayload struct {
 // RegisterResponsePayload содержит данные для ответа на регистрацию.
 type RegisterResponsePayload struct {
 	Success      bool   `json:"success"`
-	UserID       string `json:"user_id,omitempty"`      // Используем string для UUID, omitempty если ошибка
+	UserID       string `json:"user_id,omitempty"`       // Используем string для UUID, omitempty если ошибка
 	ErrorMessage string `json:"error_message,omitempty"` // omitempty если успех
 }
 
@@ -47,11 +47,11 @@ type LoginRequestPayload struct {
 
 // LoginResponsePayload содержит данные для ответа на вход.
 type LoginResponsePayload struct {
-	Success       bool   `json:"success"`
-	UserID        string `json:"user_id,omitempty"`        // omitempty если ошибка
-	DisplayName   string `json:"display_name,omitempty"`   // omitempty если ошибка
-	SessionToken  string `json:"session_token,omitempty"`  // Токен сессии, omitempty если ошибка
-	ErrorMessage  string `json:"error_message,omitempty"`   // omitempty если успех
+	Success      bool   `json:"success"`
+	UserID       string `json:"user_id,omitempty"`       // omitempty если ошибка
+	DisplayName  string `json:"display_name,omitempty"`  // omitempty если ошибка
+	SessionToken string `json:"session_token,omitempty"` // Токен сессии, omitempty если ошибка
+	ErrorMessage string `json:"error_message,omitempty"` // omitempty если успех
 }
 
 // Общая структура для сообщений об ошибках от сервера,

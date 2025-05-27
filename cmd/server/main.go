@@ -9,8 +9,11 @@ import (
 
 func main() {
 	addr := "localhost:8088"
+	hub := server.NewHub()
 
-	http.HandleFunc("/ws", server.HandleWebSocketConnections)
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		server.HandleWebSocketConnections(hub, w, r)
+	})
 
 	log.Printf("Starting server on %s\n", addr)
 	err := http.ListenAndServe(addr, nil)
