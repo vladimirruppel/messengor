@@ -100,7 +100,10 @@ AUTH_LOOP:
 			if err := json.Unmarshal(receivedMsg.Payload, &reqPayload); err != nil {
 				log.Printf("Auth: Failed to unmarshal LoginRequest payload: %v\n", err)
 				sendErrorMessage(conn, "INVALID_PAYLOAD", "Could not parse login request payload.")
-				continue
+				// Решаем закрыть соединение при ошибке парсинга запроса на логин
+				// conn.Close() // Можно добавить, если хотите быть строже
+				// return
+				continue // или даем еще попытку
 			}
 
 			user, authErr := AuthenticateUser(reqPayload.Username, reqPayload.Password)
@@ -108,10 +111,15 @@ AUTH_LOOP:
 			if authErr != nil {
 				respPayload = protocol.LoginResponsePayload{Success: false, ErrorMessage: authErr.Error()}
 				sendWebSocketResponse(conn, protocol.MsgTypeLoginResponse, respPayload)
-				continue // Остаемся в цикле AUTH_LOOP для новой попытки или регистрации
+				log.Printf("Authentication failed for %s. Closing connection.", reqPayload.Username)
+				// conn.Close() // Закрываем соединение при неудачном логине
+				// return       // и выходим из HandleWebSocketConnections
+				continue // ПОКА ОСТАВИМ CONTINUE, чтобы проверить клиентскую логику отправки LoginRequest
+				// Если клиент правильно отправляет, то он должен снова попасть сюда.
+				// Если клиент не отправляет, то он зависнет в ожидании.
 			} else {
 				authenticatedUser = user
-				sessionToken = uuid.NewString() // Генерируем токен
+				sessionToken = uuid.NewString()
 				respPayload = protocol.LoginResponsePayload{
 					Success:      true,
 					UserID:       user.ID,

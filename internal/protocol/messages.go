@@ -15,6 +15,7 @@ const (
 	MsgTypeRegisterResponse = "REGISTER_RESPONSE"
 	MsgTypeLoginRequest     = "LOGIN_REQUEST"
 	MsgTypeLoginResponse    = "LOGIN_RESPONSE"
+	MsgTypeBroadcastText    = "BROADCAST_TEXT_MESSAGE"
 )
 
 ///
@@ -59,4 +60,11 @@ type LoginResponsePayload struct {
 type ErrorPayload struct {
 	ErrorCode    string `json:"error_code"`
 	ErrorMessage string `json:"error_message"`
+}
+
+type BroadcastTextPayload struct {
+	SenderID   string `json:"sender_id"`
+	SenderName string `json:"sender_name"`
+	Text       string `json:"text"`
+	Timestamp  int64  `json:"timestamp"`
 }

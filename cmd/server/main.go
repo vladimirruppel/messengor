@@ -11,6 +11,8 @@ func main() {
 	addr := "localhost:8088"
 	hub := server.NewHub()
 
+	go hub.Run()
+
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		server.HandleWebSocketConnections(hub, w, r)
 	})

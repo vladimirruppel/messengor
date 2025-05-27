@@ -66,8 +66,34 @@ func RunClient(serverAddr string) {
 				log.Printf("Failed to unmarshal server message: %v. Raw: %s\n", err, string(messageBytes))
 				continue
 			}
-			// Отправляем распарсенное сообщение в канал для обработки в основном цикле
-			clientState.serverResponses <- wsMsg
+
+			if wsMsg.Type == protocol.MsgTypeBroadcastText {
+				// Если это широковещательное сообщение, обрабатываем и выводим его сразу здесь
+				var broadcastPayload protocol.BroadcastTextPayload
+				if err := json.Unmarshal(wsMsg.Payload, &broadcastPayload); err != nil {
+					log.Printf("Client: Failed to unmarshal BroadcastTextPayload: %v. Raw: %s\n", err, string(wsMsg.Payload))
+					continue
+				}
+
+				fmt.Printf("\r%*s\r", 80, "") // Очистка текущей строки (ширина 80 символов, можно подобрать)
+				fmt.Printf("[%s] (%s): %s\n",
+					broadcastPayload.SenderName,
+					time.Unix(broadcastPayload.Timestamp, 0).Format("15:04:05"),
+					broadcastPayload.Text)
+				fmt.Print("> ") // Снова выводим приглашение к вводу
+			} else {
+				// Для всех остальных типов сообщений (LoginResponse, RegisterResponse и т.д.)
+				// отправляем их в канал serverResponses для обработки основным циклом.
+				// Это важно, так как они влияют на состояние клиента (clientState.Current).
+				select {
+				case clientState.serverResponses <- wsMsg:
+					// Успешно отправлено в канал
+				default:
+					// Канал переполнен или что-то пошло не так. Этого не должно быть, если канал буферизован
+					// и основной цикл его читает.
+					log.Println("Warning: serverResponses channel is full or closed unexpectedly.")
+				}
+			}
 		}
 	}()
 
@@ -296,12 +322,6 @@ func processServerAuthenticationResponse(wsMsg protocol.WebSocketMessage, cs *Cl
 			log.Printf("Registration failed: %s\n", respPayload.ErrorMessage)
 			cs.Current = StateUnauthenticated
 		}
-	// Можно добавить обработку других типов сообщений, если они приходят асинхронно
-	// case protocol.MsgTypeText:
-	//  // Если мы в состоянии аутентификации, а пришел текст, это странно, но можно залогировать
-	//  var textPayload protocol.TextPayload
-	//  json.Unmarshal(wsMsg.Payload, &textPayload)
-	//  log.Printf("Unexpected text message while authenticating: %s\n", textPayload.Text)
 	default:
 		log.Printf("Received unexpected message type %s while authenticating/waiting.\n", wsMsg.Type)
 		// Можно ничего не делать или вернуть в StateUnauthenticated

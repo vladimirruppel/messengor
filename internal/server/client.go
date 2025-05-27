@@ -82,8 +82,34 @@ func (c *Client) readPump() {
 					continue
 				}
 
-				// Логируем полученное сообщение
-				log.Printf("Received MsgTypeText from UserID: %s, DisplayName: %s, Text: %s\n", c.UserID, c.DisplayName, textPayload.Text)
+				// Формируем сообщение для рассылки всем через Hub
+				broadcastPayload := protocol.BroadcastTextPayload{
+					SenderID:   c.UserID,
+					SenderName: c.DisplayName,
+					Text:       textPayload.Text,
+					Timestamp:  time.Now().Unix(),
+				}
+
+				payloadBytes, err := json.Marshal(broadcastPayload)
+				if err != nil {
+					log.Printf("Client %s (ID: %s) - Failed to marshal BroadcastTextPayload: %v", c.DisplayName, c.UserID, err)
+					continue
+				}
+
+				broadcastWsMsg := protocol.WebSocketMessage{
+					Type:    protocol.MsgTypeBroadcastText,
+					Payload: payloadBytes,
+				}
+
+				finalMessageBytes, err := json.Marshal(broadcastWsMsg)
+				if err != nil {
+					log.Printf("Client %s (ID: %s) - Failed to marshal broadcast WebSocketMessage: %v", c.DisplayName, c.UserID, err)
+					continue
+				}
+
+				// Отправляем подготовленное сообщение в хаб для рассылки
+				log.Printf("User %s (ID: %s) sending to hub.broadcast: %s", c.DisplayName, c.UserID, textPayload.Text)
+				c.hub.broadcast <- finalMessageBytes
 			} else {
 				// Если пришел другой тип сообщения (кроме аутентификационных, которые обрабатываются раньше)
 				log.Printf("Client %s sent unhandled message type %s after auth.", c.UserID, wsMsg.Type)
