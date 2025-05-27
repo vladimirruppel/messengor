@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
 
@@ -25,8 +26,24 @@ func handleWebSocketConnections(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Соединение установлено успешно!")
-	conn.Close()
+	defer conn.Close()
+	log.Println("WebSocket connection established successfully!")
+
+	for {
+		messageType, p, err := conn.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure, websocket.CloseNoStatusReceived) {
+				log.Printf("Unexpected close error from client: %v\n", err)
+			} else if err == io.EOF {
+				log.Printf("Client closed connection (EOF): %v\n", err)
+			} else {
+				log.Printf("Read error from client: %v\n", err)
+			}
+			break // Выходим из цикла for, завершая обработку этого клиента
+		}
+
+		log.Printf("Received from client (type %d): %s\n", messageType, string(p))
+	}
 }
 
 func main() {
@@ -37,6 +54,6 @@ func main() {
 	log.Printf("Starting server on %s\n", addr)
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
-		log.Fatal("ListenAndServer: ", err)
+		log.Fatal("ListenAndServe: ", err)
 	}
 }
