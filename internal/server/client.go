@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -103,13 +104,28 @@ func (c *Client) readPump() {
 					continue
 				}
 
+				storedMsg, errSave := SaveMessage(chatID, c.UserID, c.DisplayName, reqPayload.Text)
+				if errSave != nil {
+					log.Printf("Error saving private message to history for chat %s: %v", chatID, errSave)
+					c.sendError("HISTORY_SAVE_FAILED", "Could not save your message.")
+					// Можно не отправлять сообщение, если сохранение в историю критично,
+					// или отправить, но с пометкой/уведомлением об ошибке.
+					// Для MVP отправим, но залогируем.
+				}
+
 				notifyPayload := protocol.NewPrivateMessageNotifyPayload{
 					ChatID:     chatID,
+					MessageID:  "",
 					SenderID:   c.UserID,
 					SenderName: c.DisplayName,
 					ReceiverID: targetClient.UserID,
 					Text:       reqPayload.Text,
 					Timestamp:  time.Now().Unix(),
+				}
+
+				if storedMsg != nil { // Если сохранение было успешным
+					notifyPayload.MessageID = storedMsg.MessageID
+					notifyPayload.Timestamp = storedMsg.Timestamp // Используем timestamp сохраненного сообщения
 				}
 
 				// Отправляем получателю
@@ -146,14 +162,72 @@ func (c *Client) readPump() {
 					log.Printf("Client %s: Error marshalling final broadcast message: %v", c.UserID, err)
 					continue
 				}
+
+				globalChatID := "global_broadcast"
+				_, errSave := SaveMessage(globalChatID, c.UserID, c.DisplayName, textPayload.Text)
+				if errSave != nil {
+					log.Printf("Error saving broadcast message to history for chat %s: %v", globalChatID, errSave)
+					// Решаем, продолжать ли отправку, если сохранение не удалось. Для MVP - да.
+				}
+
 				c.hub.broadcast <- finalMsgBytes
+
+			case protocol.MsgTypeGetChatHistoryRequest:
+				var reqPayload protocol.GetChatHistoryRequestPayload
+				if err := json.Unmarshal(wsMsg.Payload, &reqPayload); err != nil {
+					log.Printf("Client %s: Failed to unmarshal GetChatHistoryRequest payload: %v\n", c.UserID, err)
+					c.sendError("INVALID_PAYLOAD", "Could not parse get history request payload.")
+					continue
+				}
+
+				log.Printf("Client %s (ID: %s) requested history for chat: %s (Limit: %d)",
+					c.DisplayName, c.UserID, reqPayload.ChatID, reqPayload.Limit)
+
+				// Проверка прав доступа: может ли этот UserID читать историю этого ChatID?
+				// Для личных чатов: UserID должен быть одним из участников ChatID.
+				// ChatID у нас вида "private:id1:id2". Проверим, что c.UserID есть в нем.
+				// Для broadcast чата ("global_broadcast") доступ разрешен всем аутентифицированным.
+				canAccess := false
+				if reqPayload.ChatID == "global_broadcast" { // Имя для broadcast чата
+					canAccess = true
+				} else if strings.HasPrefix(reqPayload.ChatID, "private:") {
+					parts := strings.Split(reqPayload.ChatID, ":")
+					if len(parts) == 3 && (parts[1] == c.UserID || parts[2] == c.UserID) {
+						canAccess = true
+					}
+				}
+
+				if !canAccess {
+					log.Printf("Client %s (ID: %s) - Access denied for chat history: %s", c.DisplayName, c.UserID, reqPayload.ChatID)
+					c.sendError("ACCESS_DENIED", "You do not have permission to access this chat history.")
+					continue
+				}
+
+				// Устанавливаем лимит по умолчанию, если не указан или слишком большой
+				limit := reqPayload.Limit
+				if limit <= 0 || limit > 100 { // Максимум 100 сообщений за раз
+					limit = 50
+				}
+
+				messages, err := LoadChatHistory(reqPayload.ChatID, limit)
+				if err != nil {
+					log.Printf("Client %s: Error loading history for chat %s: %v", c.UserID, reqPayload.ChatID, err)
+					c.sendError("HISTORY_LOAD_FAILED", "Could not load chat history.")
+					continue
+				}
+
+				respPayload := protocol.ChatHistoryResponsePayload{
+					ChatID:   reqPayload.ChatID,
+					Messages: messages,
+					// HasMore: true/false - можно добавить, если реализована пагинация
+				}
+				c.sendResponse(protocol.MsgTypeChatHistoryResponse, respPayload)
 
 			default:
 				log.Printf("Client %s: Received unhandled message type: %s\n", c.UserID, wsMsg.Type)
 				c.sendError("UNKNOWN_MESSAGE_TYPE", "Unhandled message type by server.")
 			}
 		}
-		// Можно обрабатывать и другие типы сообщений WebSocket, если нужно (BinaryMessage, PingMessage, PongMessage, ErrorMessage)
 	}
 }
 

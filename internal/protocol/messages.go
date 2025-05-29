@@ -9,6 +9,15 @@ type WebSocketMessage struct {
 	Payload json.RawMessage `json:"payload"`
 }
 
+type StoredMessage struct {
+	ChatID     string `json:"chat_id,omitempty"` // Полезно, если один файл для многих чатов, или для проверки
+	MessageID  string `json:"message_id"`        // Уникальный ID сообщения (например, UUID, генерируемый сервером)
+	SenderID   string `json:"sender_id"`
+	SenderName string `json:"sender_name"`
+	Text       string `json:"text"`
+	Timestamp  int64  `json:"timestamp"` // Unix
+}
+
 const (
 	MsgTypeText                      = "TEXT_MESSAGE"
 	MsgTypeRegisterRequest           = "REGISTER_REQUEST"
@@ -21,6 +30,8 @@ const (
 	MsgTypeSendPrivateMessageRequest = "SEND_PRIVATE_MESSAGE_REQUEST" // C->S: Отправка личного сообщения
 	MsgTypeNewPrivateMessageNotify   = "NEW_PRIVATE_MESSAGE_NOTIFY"   // S->C: Уведомление о новом личном сообщении (обоим участникам)
 	MsgTypeErrorNotify               = "ERROR_NOTIFY"
+	MsgTypeGetChatHistoryRequest     = "GET_CHAT_HISTORY_REQUEST" // C->S
+	MsgTypeChatHistoryResponse       = "CHAT_HISTORY_RESPONSE"    // S->C
 )
 
 ///
@@ -103,10 +114,25 @@ type SendPrivateMessageRequestPayload struct {
 // Отправляется и получателю, и отправителю (для синхронизации UI).
 type NewPrivateMessageNotifyPayload struct {
 	ChatID     string `json:"chat_id"`     // Уникальный ID для этой личной беседы (например, user1ID:user2ID)
+	MessageID  string `json:"message_id"`
 	SenderID   string `json:"sender_id"`   // ID отправителя
 	SenderName string `json:"sender_name"` // Имя отправителя
 	ReceiverID string `json:"receiver_id"` // ID получателя (полезно для клиента, чтобы понять, это ему или от него)
 	Text       string `json:"text"`
 	Timestamp  int64  `json:"timestamp"` // Unix time
 	// ServerMessageID string `json:"server_message_id"` // ID сообщения на сервере, для истории и т.д.
+}
+
+// GetChatHistoryRequestPayload - запрос истории чата.
+type GetChatHistoryRequestPayload struct {
+	ChatID         string `json:"chat_id"`
+	SinceMessageID string `json:"since_message_id,omitempty"` // Для пагинации "загрузить сообщения до этого ID"
+	Limit          int    `json:"limit,omitempty"`            // Макс. кол-во сообщений
+}
+
+// ChatHistoryResponsePayload - ответ с историей сообщений.
+type ChatHistoryResponsePayload struct {
+	ChatID   string          `json:"chat_id"`
+	Messages []StoredMessage `json:"messages"`           // Отправляем массив объектов StoredMessage
+	HasMore  bool            `json:"has_more,omitempty"` // Есть ли еще более старые сообщения
 }
