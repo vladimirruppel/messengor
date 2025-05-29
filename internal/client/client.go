@@ -92,11 +92,17 @@ func (app *ClientApp) processCurrentState() {
 	case StateUnauthenticated:
 		handleUnauthenticatedState(app)
 	case StateAuthenticating:
-		handleAuthenticatingState(app)
-	case StateChatList:
-		handleChatListState(app)
-	case StateInChat:
-		handleInChatState(app)
+		handleAuthenticatingState(app) // Этот обработчик должен читать из app.state.ServerResponses
+	case StateMainMenu: // Новое имя
+		handleMainMenuState(app)
+	case StateFetchingUserList: // Новое состояние
+		handleFetchingUserListState(app)
+	case StateUserSelectionForPrivateChat: // Новое состояние
+		handleUserSelectionForPrivateChatState(app)
+	case StateInChat: // Это теперь для Global Chat
+		handleGlobalChatState(app) // Новый обработчик для глобального чата
+	case StateInPrivateChat: // Новое состояние
+		handleInPrivateChatState(app)
 	default:
 		log.Printf("Unknown client state: %s. Resetting to Unauthenticated.\n", app.state.Current)
 		app.state.Current = StateUnauthenticated

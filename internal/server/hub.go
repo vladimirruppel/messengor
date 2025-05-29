@@ -1,13 +1,20 @@
 package server
 
-import "log"
+import (
+	"log"
+	"sync"
+
+	"github.com/vladimirruppel/messengor/internal/protocol"
+)
 
 // Hub управляет набором активных клиентов и рассылает им сообщения.
 type Hub struct {
-	clients    map[*Client]bool // Зарегистрированные клиенты
-	broadcast  chan []byte      // Входящие сообщения от клиентов для рассылки
-	register   chan *Client     // Канал для регистрации клиентов
-	unregister chan *Client     // Канал для отмены регистрации клиентов
+	broadcast  chan []byte  // Входящие сообщения от клиентов для рассылки
+	register   chan *Client // Канал для регистрации клиентов
+	unregister chan *Client // Канал для отмены регистрации клиентов
+
+	clients      map[*Client]bool // Зарегистрированные клиенты
+	clientsMutex sync.RWMutex     // Мьютекс для защиты доступа к карте clients
 }
 
 func NewHub() *Hub {
@@ -24,16 +31,17 @@ func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:
-			log.Printf("DEBUG: Server for %s (ID: %s) - Registering client INSIDE hub...", client.DisplayName, client.UserID)
+			h.clientsMutex.Lock()
 			h.clients[client] = true
+			h.clientsMutex.Unlock()
 			if client.IsAuthenticated {
 				log.Printf("Hub: Client %s (ID: %s) registered. Total clients: %d", client.DisplayName, client.UserID, len(h.clients))
 			} else {
 				log.Printf("Hub: New client (conn: %p) registered (pending authentication). Total clients: %d", client.conn, len(h.clients))
 			}
-			// TODO: (Будущее) Уведомить других пользователей о новом подключении, если нужно.
 
 		case client := <-h.unregister:
+			h.clientsMutex.Lock()
 			// Клиент отключается. Проверяем, есть ли он в нашей карте.
 			if _, ok := h.clients[client]; ok {
 				// Удаляем клиента из карты.
@@ -46,52 +54,64 @@ func (h *Hub) Run() {
 				} else {
 					log.Printf("Hub: Client (conn: %p) unregistered. Total clients: %d", client.conn, len(h.clients))
 				}
-				// TODO: (Будущее) Уведомить других пользователей об отключении, если нужно.
 			}
+			h.clientsMutex.Unlock()
 
 		case message := <-h.broadcast:
-			if len(message) > 0 {
-				log.Printf("Hub: Broadcasting message to %d clients. Message approx: %s", len(h.clients), string(message))
-				for client := range h.clients {
-					// Рассылаем только аутентифицированным клиентам
-					// (Хотя в нашем Hub.clients должны быть только аутентифицированные, если
-					// регистрация в Hub происходит после успешной аутентификации в HandleWebSocketConnections)
-					if client.IsAuthenticated { // Двойная проверка не помешает
-						select {
-						case client.send <- message:
-							// Сообщение успешно поставлено в очередь на отправку клиенту
-						default:
-							log.Printf("Hub: Failed to send broadcast to client %s (ID: %s), unregistering.", client.DisplayName, client.UserID)
-							// Канал client.send закрыт или переполнен.
-							// Удаляем клиента из хаба, так как он, вероятно, "завис" или отсоединился.
-							// Важно: не закрывать client.send здесь снова, если он уже может быть закрыт
-							// в процессе отмены регистрации. Просто удаляем из карты.
-							// close(client.send) // Это может вызвать панику, если канал уже закрыт.
-							// Лучше, если unregister сам этим занимается.
-							// Давайте упростим: если не можем отправить, просто удаляем из карты.
-							// Hub.unregister позаботится о закрытии канала send.
-							// h.unregister <- client // Отправляем в канал unregister для корректной отписки
-							// НО! Отправка в unregister из этого же select-цикла может привести к дедлоку,
-							// если unregister-канал не буферизован и никто его не читает.
-							// Безопаснее просто удалить из карты и положиться на то, что read/write pump
-							// этого клиента сами отпишутся.
-							// Или запустить отписку в горутине.
-							// Самое простое и безопасное на данном этапе:
-							delete(h.clients, client)
-							// Если мы хотим, чтобы writePump клиента корректно завершился,
-							// его канал send нужно закрыть.
-							// Но если мы просто делаем delete, а клиент еще жив, его writePump не узнает,
-							// что его удалили из рассылки.
-							// Поэтому правильнее инициировать unregister.
-							// Для избежания дедлока, можно запустить в горутине:
-							go func(clToUnregister *Client) {
-								log.Printf("Hub: Client %s (ID: %s) send channel full/closed during broadcast. Initiating unregister.", clToUnregister.DisplayName, clToUnregister.UserID)
-								h.unregister <- clToUnregister
-							}(client)
-						}
+			h.clientsMutex.RLock()
+			log.Printf("Hub: Broadcasting message to %d clients. Message approx: %s", len(h.clients), string(message))
+			for client := range h.clients {
+				if client.IsAuthenticated {
+					select {
+					case client.send <- message:
+					default:
+						log.Printf("Hub: Client %s (ID: %s) send channel full/closed during broadcast. Initiating unregister.", client.DisplayName, client.UserID)
+						go func(clToUnregister *Client) {
+							h.unregister <- clToUnregister
+						}(client)
 					}
 				}
 			}
+			h.clientsMutex.RUnlock()
 		}
 	}
+}
+
+// getClientCount возвращает текущее количество клиентов (вспомогательная функция для использования внутри Lock/RLock).
+// Эту функцию лучше вызывать, когда мьютекс уже захвачен.
+func (h *Hub) getClientCount() int {
+	return len(h.clients)
+}
+
+// GetAuthenticatedUsersInfo возвращает список информации об аутентифицированных пользователях,
+// исключая пользователя с excludeUserID.
+func (h *Hub) GetAuthenticatedUsersInfo(excludeUserID string) []protocol.UserInfo {
+	h.clientsMutex.RLock()
+	defer h.clientsMutex.RUnlock()
+
+	var usersInfo []protocol.UserInfo
+	for client := range h.clients {
+		if client.IsAuthenticated && client.UserID != excludeUserID {
+			usersInfo = append(usersInfo, protocol.UserInfo{
+				UserID:      client.UserID,
+				DisplayName: client.DisplayName,
+				IsOnline:    true, // Если клиент в хабе и аутентифицирован, он онлайн
+			})
+		}
+	}
+	return usersInfo
+}
+
+// FindClientByUserID ищет активного и аутентифицированного клиента по его UserID.
+func (h *Hub) FindClientByUserID(userID string) (*Client, bool) {
+	h.clientsMutex.RLock()
+	defer h.clientsMutex.RUnlock()
+
+	for client := range h.clients {
+		// Убедимся, что ищем только среди аутентифицированных клиентов
+		if client.IsAuthenticated && client.UserID == userID {
+			return client, true
+		}
+	}
+	return nil, false
 }

@@ -10,12 +10,16 @@ type WebSocketMessage struct {
 }
 
 const (
-	MsgTypeText             = "TEXT_MESSAGE"
-	MsgTypeRegisterRequest  = "REGISTER_REQUEST"
-	MsgTypeRegisterResponse = "REGISTER_RESPONSE"
-	MsgTypeLoginRequest     = "LOGIN_REQUEST"
-	MsgTypeLoginResponse    = "LOGIN_RESPONSE"
-	MsgTypeBroadcastText    = "BROADCAST_TEXT_MESSAGE"
+	MsgTypeText                      = "TEXT_MESSAGE"
+	MsgTypeRegisterRequest           = "REGISTER_REQUEST"
+	MsgTypeRegisterResponse          = "REGISTER_RESPONSE"
+	MsgTypeLoginRequest              = "LOGIN_REQUEST"
+	MsgTypeLoginResponse             = "LOGIN_RESPONSE"
+	MsgTypeBroadcastText             = "BROADCAST_TEXT_MESSAGE"
+	MsgTypeGetUserListRequest        = "GET_USER_LIST_REQUEST"        // C->S: Запрос списка пользователей
+	MsgTypeUserListResponse          = "USER_LIST_RESPONSE"           // S->C: Ответ со списком пользователей
+	MsgTypeSendPrivateMessageRequest = "SEND_PRIVATE_MESSAGE_REQUEST" // C->S: Отправка личного сообщения
+	MsgTypeNewPrivateMessageNotify   = "NEW_PRIVATE_MESSAGE_NOTIFY"   // S->C: Уведомление о новом личном сообщении (обоим участникам)
 )
 
 ///
@@ -67,4 +71,41 @@ type BroadcastTextPayload struct {
 	SenderName string `json:"sender_name"`
 	Text       string `json:"text"`
 	Timestamp  int64  `json:"timestamp"`
+}
+
+// UserInfo содержит публичную информацию о пользователе.
+type UserInfo struct {
+	UserID      string `json:"user_id"`
+	DisplayName string `json:"display_name"`
+	IsOnline    bool   `json:"is_online"`
+}
+
+// GetUserListRequestPayload - полезная нагрузка для запроса списка пользователей.
+// Может быть пустой или содержать фильтры в будущем.
+type GetUserListRequestPayload struct {
+	// Filter string `json:"filter,omitempty"` // Например, для поиска по имени
+}
+
+// UserListResponsePayload содержит список пользователей.
+type UserListResponsePayload struct {
+	Users []UserInfo `json:"users"`
+}
+
+// SendPrivateMessageRequestPayload содержит данные для отправки личного сообщения.
+type SendPrivateMessageRequestPayload struct {
+	TargetUserID string `json:"target_user_id"` // Кому предназначено сообщение
+	Text         string `json:"text"`           // Текст сообщения
+	// ClientMessageID string `json:"client_message_id,omitempty"` // Для отслеживания доставки, если нужно
+}
+
+// NewPrivateMessageNotifyPayload содержит данные нового личного сообщения.
+// Отправляется и получателю, и отправителю (для синхронизации UI).
+type NewPrivateMessageNotifyPayload struct {
+	ChatID       string `json:"chat_id"`        // Уникальный ID для этой личной беседы (например, user1ID:user2ID)
+	SenderID     string `json:"sender_id"`    // ID отправителя
+	SenderName   string `json:"sender_name"`  // Имя отправителя
+	ReceiverID   string `json:"receiver_id"`  // ID получателя (полезно для клиента, чтобы понять, это ему или от него)
+	Text         string `json:"text"`
+	Timestamp    int64  `json:"timestamp"`    // Unix time
+	// ServerMessageID string `json:"server_message_id"` // ID сообщения на сервере, для истории и т.д.
 }

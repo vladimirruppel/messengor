@@ -68,52 +68,80 @@ func (c *Client) readPump() {
 				continue
 			}
 
-			if wsMsg.Type == protocol.MsgTypeText {
-				if !c.IsAuthenticated { // Проверка, аутентифицирован ли клиент
-					log.Printf("Client (conn: %p) sent text message before authentication.", c.conn)
-					sendErrorMessage(c.conn, "UNAUTHORIZED", "Please login to send messages.")
+			switch wsMsg.Type {
+			case protocol.MsgTypeGetUserListRequest:
+				// Полезная нагрузка для GetUserListRequest у нас пока пустая
+				log.Printf("Client %s (ID: %s) requested user list.", c.DisplayName, c.UserID)
+				userList := c.hub.GetAuthenticatedUsersInfo(c.UserID) // Исключаем себя
+				respPayload := protocol.UserListResponsePayload{Users: userList}
+				// Отправляем ответ напрямую этому клиенту через его send канал (не через sendWebSocketResponse)
+				// так как sendWebSocketResponse требует conn, а у нас есть c.send
+				// Создадим для этого общую функцию отправки для Client
+				c.sendResponse(protocol.MsgTypeUserListResponse, respPayload)
+	
+			case protocol.MsgTypeSendPrivateMessageRequest:
+				var reqPayload protocol.SendPrivateMessageRequestPayload
+				if err := json.Unmarshal(wsMsg.Payload, &reqPayload); err != nil {
+					log.Printf("Client %s: Failed to unmarshal SendPrivateMessageRequest payload: %v\n", c.UserID, err)
+					c.sendError("INVALID_PAYLOAD", "Could not parse private message request payload.")
 					continue
 				}
-
+	
+				log.Printf("Client %s sending private message to UserID: %s.", c.DisplayName, reqPayload.TargetUserID)
+	
+				targetClient, found := c.hub.FindClientByUserID(reqPayload.TargetUserID)
+				if !found {
+					log.Printf("Client %s: Target user ID %s for private message not found or not online.", c.UserID, reqPayload.TargetUserID)
+					c.sendError("USER_NOT_FOUND", "Recipient is not online or does not exist.")
+					continue
+				}
+	
+				chatID, chatIDErr := GeneratePrivateChatID(c.UserID, targetClient.UserID)
+				if chatIDErr != nil {
+					log.Printf("Client %s: Error generating ChatID for private message: %v", c.UserID, chatIDErr)
+					c.sendError("INTERNAL_ERROR", "Could not process private message.")
+					continue
+				}
+	
+				notifyPayload := protocol.NewPrivateMessageNotifyPayload{
+					ChatID:     chatID,
+					SenderID:   c.UserID,
+					SenderName: c.DisplayName,
+					ReceiverID: targetClient.UserID,
+					Text:       reqPayload.Text,
+					Timestamp:  time.Now().Unix(),
+				}
+	
+				// Отправляем получателю
+				targetClient.sendResponse(protocol.MsgTypeNewPrivateMessageNotify, notifyPayload)
+				// Отправляем "эхо" отправителю
+				c.sendResponse(protocol.MsgTypeNewPrivateMessageNotify, notifyPayload)
+	
+			case protocol.MsgTypeText: // Это для Global Broadcast (если клиент шлет MsgTypeText)
 				var textPayload protocol.TextPayload
 				if err := json.Unmarshal(wsMsg.Payload, &textPayload); err != nil {
-					log.Printf("Client %s: Failed to unmarshal text payload: %v", c.UserID, err)
-					sendErrorMessage(c.conn, "INVALID_PAYLOAD", "Could not parse text payload.")
+					log.Printf("Client %s: Failed to unmarshal TextPayload for broadcast: %v", c.UserID, err)
+					c.sendError("INVALID_PAYLOAD", "Could not parse text payload for broadcast.")
 					continue
 				}
-
-				// Формируем сообщение для рассылки всем через Hub
-				broadcastPayload := protocol.BroadcastTextPayload{
+	
+				broadcastData := protocol.BroadcastTextPayload{
 					SenderID:   c.UserID,
 					SenderName: c.DisplayName,
 					Text:       textPayload.Text,
 					Timestamp:  time.Now().Unix(),
 				}
-
-				payloadBytes, err := json.Marshal(broadcastPayload)
-				if err != nil {
-					log.Printf("Client %s (ID: %s) - Failed to marshal BroadcastTextPayload: %v", c.DisplayName, c.UserID, err)
-					continue
-				}
-
+				broadcastPayloadBytes, _ := json.Marshal(broadcastData) // Обработать ошибку!
 				broadcastWsMsg := protocol.WebSocketMessage{
-					Type:    protocol.MsgTypeBroadcastText,
-					Payload: payloadBytes,
+					Type:    protocol.MsgTypeBroadcastText, // Сервер всегда рассылает этот тип для broadcast
+					Payload: broadcastPayloadBytes,
 				}
-
-				finalMessageBytes, err := json.Marshal(broadcastWsMsg)
-				if err != nil {
-					log.Printf("Client %s (ID: %s) - Failed to marshal broadcast WebSocketMessage: %v", c.DisplayName, c.UserID, err)
-					continue
-				}
-
-				// Отправляем подготовленное сообщение в хаб для рассылки
-				log.Printf("User %s (ID: %s) sending to hub.broadcast: %s", c.DisplayName, c.UserID, textPayload.Text)
-				c.hub.broadcast <- finalMessageBytes
-			} else {
-				// Если пришел другой тип сообщения (кроме аутентификационных, которые обрабатываются раньше)
-				log.Printf("Client %s sent unhandled message type %s after auth.", c.UserID, wsMsg.Type)
-				// TODO: Обработка других C2S сообщений после аутентификации (например, выход из чата, запрос списка пользователей и т.д.)
+				finalMsgBytes, _ := json.Marshal(broadcastWsMsg) // Обработать ошибку!
+				c.hub.broadcast <- finalMsgBytes // Отправляем в общий broadcast канал хаба
+	
+			default:
+				log.Printf("Client %s: Received unhandled message type: %s\n", c.UserID, wsMsg.Type)
+				c.sendError("UNKNOWN_MESSAGE_TYPE", "Unhandled message type by server.")
 			}
 		}
 		// Можно обрабатывать и другие типы сообщений WebSocket, если нужно (BinaryMessage, PingMessage, PongMessage, ErrorMessage)
@@ -168,4 +196,41 @@ func (c *Client) writePump() {
 			}
 		}
 	}
+}
+
+// sendResponse - вспомогательный метод для Client для отправки ответа/уведомления
+func (c *Client) sendResponse(msgType string, payloadData interface{}) {
+	payloadBytes, err := json.Marshal(payloadData)
+	if err != nil {
+		log.Printf("Client %s: Error marshalling payload for type %s: %v\n", c.UserID, msgType, err)
+		return
+	}
+	wsMsg := protocol.WebSocketMessage{Type: msgType, Payload: payloadBytes}
+	messageBytes, err := json.Marshal(wsMsg)
+	if err != nil {
+		log.Printf("Client %s: Error marshalling WebSocket message for type %s: %v\n", c.UserID, msgType, err)
+		return
+	}
+
+	select {
+	case c.send <- messageBytes:
+	default:
+		log.Printf("Client %s: Send channel full or closed when trying to send %s.", c.UserID, msgType)
+		// Хаб должен будет обработать отписку этого клиента, если он не может принимать сообщения.
+	}
+}
+
+// sendError - вспомогательный метод для Client для отправки сообщения об ошибке
+func (c *Client) sendError(errorCode string, errorMessage string) {
+	// Мы еще не определили специальный тип сообщения для ошибок S2C,
+	// но если бы он был (например, MsgTypeErrorNotify), то здесь бы он использовался.
+	// Пока что можно использовать общий sendWebSocketResponse, если он есть,
+	// или просто логировать, или отправлять ошибку в существующем формате ответа,
+	// если это ответ на запрос.
+	// Для простоты, отправим как простой текст или специальную структуру.
+	// Давайте пока ничего не отправлять, а просто логировать,
+	// т.к. sendErrorMessage из server.go тоже была заглушкой.
+	log.Printf("Error for client %s: Code=%s, Message=%s (not sent to client yet)", c.UserID, errorCode, errorMessage)
+	// TODO: Реализовать отправку стандартизированного сообщения об ошибке клиенту
+	// Например, c.sendResponse(protocol.MsgTypeErrorNotify, protocol.ErrorPayload{...})
 }
