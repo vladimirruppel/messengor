@@ -58,3 +58,5 @@ Thumbs.db
 # Coverage profil
 coverage.out
 coverage.html
+
+*.json
