@@ -107,7 +107,6 @@ type UserListResponsePayload struct {
 type SendPrivateMessageRequestPayload struct {
 	TargetUserID string `json:"target_user_id"` // Кому предназначено сообщение
 	Text         string `json:"text"`           // Текст сообщения
-	// ClientMessageID string `json:"client_message_id,omitempty"` // Для отслеживания доставки, если нужно
 }
 
 // NewPrivateMessageNotifyPayload содержит данные нового личного сообщения.
@@ -120,7 +119,6 @@ type NewPrivateMessageNotifyPayload struct {
 	ReceiverID string `json:"receiver_id"` // ID получателя (полезно для клиента, чтобы понять, это ему или от него)
 	Text       string `json:"text"`
 	Timestamp  int64  `json:"timestamp"` // Unix time
-	// ServerMessageID string `json:"server_message_id"` // ID сообщения на сервере, для истории и т.д.
 }
 
 // GetChatHistoryRequestPayload - запрос истории чата.

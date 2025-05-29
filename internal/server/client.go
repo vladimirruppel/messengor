@@ -71,13 +71,9 @@ func (c *Client) readPump() {
 
 			switch wsMsg.Type {
 			case protocol.MsgTypeGetUserListRequest:
-				// Полезная нагрузка для GetUserListRequest у нас пока пустая
 				log.Printf("Client %s (ID: %s) requested user list.", c.DisplayName, c.UserID)
 				userList := c.hub.GetAuthenticatedUsersInfo(c.UserID) // Исключаем себя
 				respPayload := protocol.UserListResponsePayload{Users: userList}
-				// Отправляем ответ напрямую этому клиенту через его send канал (не через sendWebSocketResponse)
-				// так как sendWebSocketResponse требует conn, а у нас есть c.send
-				// Создадим для этого общую функцию отправки для Client
 				c.sendResponse(protocol.MsgTypeUserListResponse, respPayload)
 
 			case protocol.MsgTypeSendPrivateMessageRequest:
@@ -108,9 +104,6 @@ func (c *Client) readPump() {
 				if errSave != nil {
 					log.Printf("Error saving private message to history for chat %s: %v", chatID, errSave)
 					c.sendError("HISTORY_SAVE_FAILED", "Could not save your message.")
-					// Можно не отправлять сообщение, если сохранение в историю критично,
-					// или отправить, но с пометкой/уведомлением об ошибке.
-					// Для MVP отправим, но залогируем.
 				}
 
 				notifyPayload := protocol.NewPrivateMessageNotifyPayload{
@@ -150,7 +143,6 @@ func (c *Client) readPump() {
 				broadcastPayloadBytes, err := json.Marshal(broadcastData)
 				if err != nil {
 					log.Printf("Client %s: Error marshalling broadcast payload: %v", c.UserID, err)
-					// Возможно, отправить ошибку клиенту или просто пропустить это сообщение
 					continue
 				}
 				broadcastWsMsg := protocol.WebSocketMessage{
@@ -249,7 +241,7 @@ func (c *Client) writePump() {
 				return
 			}
 
-			w, err := c.conn.NextWriter(websocket.TextMessage) // Мы всегда отправляем текст (JSON)
+			w, err := c.conn.NextWriter(websocket.TextMessage)
 			if err != nil {
 				return
 			}
@@ -259,14 +251,7 @@ func (c *Client) writePump() {
 			// Это оптимизация, чтобы не создавать новый фрейм для каждого маленького сообщения
 			n := len(c.send)
 			for i := 0; i < n; i++ {
-				w.Write([]byte{'\n'}) // Можно использовать \n как разделитель, если клиент это поддерживает
-				// Но лучше каждое сообщение отправлять отдельным WriteMessage, если нет специальной логики на клиенте
-				// Для простоты пока так, но имейте в виду.
-				// БОЛЕЕ ПРАВИЛЬНО: убрать этот цикл и просто делать w.Write(message)
-				// и затем w.Close() для каждого сообщения.
-				// Либо если хотим батчинг, то клиент должен уметь парсить несколько JSON подряд.
-				// Уберем этот цикл для ясности и надежности:
-				// (цикл for i := 0; i < n; i++ был удален)
+				w.Write([]byte{'\n'})
 			}
 
 			if err := w.Close(); err != nil {

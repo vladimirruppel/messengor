@@ -100,10 +100,7 @@ AUTH_LOOP:
 			if err := json.Unmarshal(receivedMsg.Payload, &reqPayload); err != nil {
 				log.Printf("Auth: Failed to unmarshal LoginRequest payload: %v\n", err)
 				sendErrorMessage(conn, "INVALID_PAYLOAD", "Could not parse login request payload.")
-				// Решаем закрыть соединение при ошибке парсинга запроса на логин
-				// conn.Close() // Можно добавить, если хотите быть строже
-				// return
-				continue // или даем еще попытку
+				continue
 			}
 
 			user, authErr := AuthenticateUser(reqPayload.Username, reqPayload.Password)
@@ -112,11 +109,7 @@ AUTH_LOOP:
 				respPayload = protocol.LoginResponsePayload{Success: false, ErrorMessage: authErr.Error()}
 				sendWebSocketResponse(conn, protocol.MsgTypeLoginResponse, respPayload)
 				log.Printf("Authentication failed for %s. Closing connection.", reqPayload.Username)
-				// conn.Close() // Закрываем соединение при неудачном логине
-				// return       // и выходим из HandleWebSocketConnections
-				continue // ПОКА ОСТАВИМ CONTINUE, чтобы проверить клиентскую логику отправки LoginRequest
-				// Если клиент правильно отправляет, то он должен снова попасть сюда.
-				// Если клиент не отправляет, то он зависнет в ожидании.
+				continue
 			} else {
 				authenticatedUser = user
 				sessionToken = uuid.NewString()
@@ -203,10 +196,10 @@ func sendWebSocketResponse(conn *websocket.Conn, msgType string, payloadData int
 
 // Вспомогательная функция для отправки сообщений об ошибках клиенту
 func sendErrorMessage(conn *websocket.Conn, errorCode string, errorMessage string) {
-    payload := protocol.ErrorPayload{
-        ErrorCode:    errorCode,
-        ErrorMessage: errorMessage,
-    }
-    log.Printf("Sending error to client: Code=%s, Message=%s\n", errorCode, errorMessage)
-    sendWebSocketResponse(conn, protocol.MsgTypeErrorNotify, payload) // Используем новый тип
+	payload := protocol.ErrorPayload{
+		ErrorCode:    errorCode,
+		ErrorMessage: errorMessage,
+	}
+	log.Printf("Sending error to client: Code=%s, Message=%s\n", errorCode, errorMessage)
+	sendWebSocketResponse(conn, protocol.MsgTypeErrorNotify, payload) // Используем новый тип
 }

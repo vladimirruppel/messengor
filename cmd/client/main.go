@@ -15,21 +15,21 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/vladimirruppel/messengor/internal/protocol" // Путь к вашему пакету protocol
+	"github.com/vladimirruppel/messengor/internal/protocol"
 )
 
 var (
 	addr         = flag.String("addr", "localhost:8088", "http service address")
 	conn         *websocket.Conn
-	mu           sync.Mutex // Для защиты conn и других общих ресурсов, если понадобится
+	mu           sync.Mutex
 	loggedInUser struct {
 		ID          string
 		DisplayName string
 		Token       string
 	}
 	isAuthenticated = false
-	currentChatID   = "global_broadcast"                 // По умолчанию - глобальный чат
-	knownUsers      = make(map[string]protocol.UserInfo) // Карта UserID -> UserInfo
+	currentChatID   = "global_broadcast"
+	knownUsers      = make(map[string]protocol.UserInfo) // UserID -> UserInfo
 	inputPrompt     = "> "
 )
 
@@ -96,7 +96,7 @@ func sendRequest(msgType string, payload interface{}) error {
 	if err != nil {
 		return fmt.Errorf("failed to marshal WebSocketMessage: %w", err)
 	}
-	// log.Printf("CLIENT: Sending message: Type=%s, Payload=%s\n", wsMsg.Type, string(wsMsg.Payload))
+	
 	return conn.WriteMessage(websocket.TextMessage, msgBytes)
 }
 
@@ -117,19 +117,15 @@ func listenToServer() {
 		_, messageBytes, err := conn.ReadMessage()
 		if err != nil {
 			log.Printf("Read error: %v. Attempting to reconnect or exiting...", err)
-			// Здесь можно добавить логику переподключения или просто выход
 			isAuthenticated = false // Сбрасываем аутентификацию при потере соединения
+
 			// Попытка переподключения (простая)
 			for {
 				log.Println("Attempting to reconnect...")
 				if e := connectToServer(); e == nil {
 					log.Println("Reconnected. Please log in again.")
-					// Нужно будет снова пройти аутентификацию
-					// Для простоты, сейчас просто выведем сообщение
-					// В более сложном клиенте, можно автоматически пытаться логиниться по токену
-					// или переводить в состояние ожидания команды /login
-					fmt.Print(inputPrompt) // Показать промпт снова
-					break                  // выходим из цикла переподключения
+					fmt.Print(inputPrompt)
+					break
 				}
 				time.Sleep(5 * time.Second)
 			}
@@ -141,11 +137,9 @@ func listenToServer() {
 			log.Printf("Failed to unmarshal WebSocketMessage: %v. Raw: %s", err, string(messageBytes))
 			continue
 		}
-		// log.Printf("CLIENT: Received message: Type=%s, Payload=%s\n", wsMsg.Type, string(wsMsg.Payload))
+
 		clearLineAndPrint := func(a ...interface{}) {
-			// Простой способ "очистить" текущую строку ввода перед печатью сообщения от сервера
-			// В реальном TUI это делается культурнее
-			fmt.Print("\r" + strings.Repeat(" ", len(inputPrompt)+50) + "\r") // Стираем побольше
+			fmt.Print("\r" + strings.Repeat(" ", len(inputPrompt)+50) + "\r")
 			fmt.Println(a...)
 			fmt.Print(inputPrompt) // Печатаем промпт снова
 		}
@@ -219,12 +213,7 @@ func listenToServer() {
 			if _, ok := knownUsers[pm.SenderID]; !ok && pm.SenderID != "" {
 				knownUsers[pm.SenderID] = protocol.UserInfo{UserID: pm.SenderID, DisplayName: pm.SenderName, IsOnline: true}
 			}
-			if _, ok := knownUsers[pm.ReceiverID]; !ok && pm.ReceiverID != "" {
-				// Получателя может не быть в списке, если это мы, но на всякий случай
-				// Если сервер присылает имя получателя, можно было бы его тоже сохранить
-				// Но в текущем payload его нет, только ID
-				// knownUsers[pm.ReceiverID] = protocol.UserInfo{UserID: pm.ReceiverID, DisplayName: "User_"+pm.ReceiverID[:4], IsOnline: true}
-			}
+			if _, ok := knownUsers[pm.ReceiverID]; !ok && pm.ReceiverID != "" {	}
 
 			timestamp := time.Unix(pm.Timestamp, 0).Format("15:04:05")
 			direction := "To"
@@ -236,12 +225,10 @@ func listenToServer() {
 			if pm.SenderID != loggedInUser.ID { // Сообщение пришло нам
 				direction = "From"
 				interlocutorName = pm.SenderName
-			} else { // Это "эхо" нашего отправленного сообщения
-				// interlocutorName уже должен быть именем получателя
 			}
 
 			// Если текущий чат не совпадает с чатом сообщения, уведомить и не менять активный чат
-			// Иначе, просто показать сообщение
+			// Иначе просто показать сообщение
 			if pm.ChatID == currentChatID {
 				clearLineAndPrintf("[%s PM %s %s (%s)] %s\n", timestamp, direction, interlocutorName, pm.SenderID, pm.Text)
 			} else {
@@ -257,13 +244,12 @@ func listenToServer() {
 			}
 			clearLineAndPrint("CLIENT: Online Users:")
 			// Очистим старых известных пользователей, чтобы isOnline был актуален
-			// Или лучше обновлять? Пока просто перезапишем тех, кто пришел
 			tempKnownUsers := make(map[string]protocol.UserInfo)
 			for _, u := range resp.Users {
 				clearLineAndPrintf(" - %s (ID: %s, Online: %v)\n", u.DisplayName, u.UserID, u.IsOnline)
 				tempKnownUsers[u.UserID] = u
 			}
-			// Добавим себя, если нас нет (сервер может не присылать себя)
+			// Добавим себя, если нас нет
 			if loggedInUser.ID != "" {
 				if _, ok := tempKnownUsers[loggedInUser.ID]; !ok {
 					tempKnownUsers[loggedInUser.ID] = protocol.UserInfo{UserID: loggedInUser.ID, DisplayName: loggedInUser.DisplayName, IsOnline: true}
@@ -572,7 +558,7 @@ func handleUserInput() {
 
 func main() {
 	flag.Parse()
-	log.SetFlags(0) // Можно убрать временные метки из логов клиента для чистоты
+	log.SetFlags(0)
 
 	// Обработка Ctrl+C
 	interrupt := make(chan os.Signal, 1)

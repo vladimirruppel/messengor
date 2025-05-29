@@ -39,7 +39,6 @@ const userStoreFile = "users_data.json" // Файл для хранения да
 // init вызывается один раз при импорте пакета.
 func init() {
 	if err := loadUsersFromFile(); err != nil {
-		// Если не удалось загрузить, сервер продолжит работу с пустым хранилищем (или создаст новый файл при первой регистрации).
 		log.Printf("Warning: Could not load users from '%s': %v. Starting with an empty user store.", userStoreFile, err)
 		// Убедимся, что userStore инициализирован в любом случае
 		userStoreMutex.Lock()
@@ -88,8 +87,7 @@ func loadUsersFromFile() error {
 // Эта функция должна вызываться, когда userStoreMutex уже ЗАХВАЧЕН НА ЗАПИСЬ (Lock),
 // так как она отражает состояние userStore, которое только что было изменено.
 func saveUsersToFile() error {
-	// Данные для сохранения (userStore) уже должны быть защищены мьютексом в вызывающей функции.
-	data, err := json.MarshalIndent(userStore, "", "  ") // Используем MarshalIndent для читаемости файла
+	data, err := json.MarshalIndent(userStore, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal user store: %w", err)
 	}
@@ -97,7 +95,7 @@ func saveUsersToFile() error {
 	if err := os.WriteFile(userStoreFile, data, 0644); err != nil {
 		return fmt.Errorf("failed to write user data to file '%s': %w", userStoreFile, err)
 	}
-	// log.Printf("User store successfully saved to '%s'.", userStoreFile) // Можно раскомментировать для отладки
+	
 	return nil
 }
 

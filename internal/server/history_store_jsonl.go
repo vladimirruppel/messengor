@@ -29,10 +29,6 @@ func initHistoryStore() {
 
 // getChatFilePath возвращает путь к файлу истории для данного ChatID.
 func getChatFilePath(chatID string) string {
-	// Простая валидация ChatID, чтобы избежать проблем с именами файлов
-	// (например, если chatID содержит '/', '..')
-	// Для простоты предполагаем, что chatID безопасен.
-	// В реальном приложении нужна санация имени файла.
 	return filepath.Join(historyDir, fmt.Sprintf("%s.jsonl", chatID))
 }
 
@@ -91,17 +87,14 @@ func SaveMessage(chatID string, senderID string, senderName string, text string)
 	return storedMsg, nil
 }
 
-// LoadChatHistory загружает последние N сообщений из файла истории.
-// Для MVP просто загрузим все (или последние N, если limit > 0).
 func LoadChatHistory(chatID string, limit int) ([]protocol.StoredMessage, error) {
 	if chatID == "" {
 		log.Println("LoadChatHistory: Attempted to load history with empty ChatID")
 		return nil, fmt.Errorf("chatID cannot be empty")
 	}
 
-	fileMutex := getFileMutex(chatID) // Чтение тоже лучше защитить, чтобы не читать частично записанный файл,
-	// хотя для jsonl это менее критично, чем для бинарных форматов.
-	fileMutex.Lock() // Используем Lock, т.к. os.Open может конфликтовать с os.OpenFile в O_APPEND в некоторых ОС при создании
+	fileMutex := getFileMutex(chatID) 
+	fileMutex.Lock()
 	defer fileMutex.Unlock()
 
 	filePath := getChatFilePath(chatID)
