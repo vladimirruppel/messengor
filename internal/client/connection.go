@@ -51,7 +51,7 @@ func readFromServer(conn *websocket.Conn, responsesChan chan<- protocol.WebSocke
 		}
 
 		// Все типы сообщений отправляем в основной цикл для обработки
-		log.Printf("DEBUG: readFromServer putting message into responsesChan: Type=%s", wsMsg.Type) // Для отладки
+		// log.Printf("DEBUG: readFromServer putting message into responsesChan: Type=%s", wsMsg.Type) // Для отладки
 		select {
 		case responsesChan <- wsMsg:
 			// Сообщение успешно отправлено в канал

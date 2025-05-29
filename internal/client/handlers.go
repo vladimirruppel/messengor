@@ -19,7 +19,7 @@ func processBroadcastMessage(payload json.RawMessage) {
 		// Очистка текущей строки ввода (может быть неидеальной)
 		// \r - возврат каретки, %*s - строка пробелов для затирания, снова \r
 		// Лучше вывести сообщение на новой строке, чтобы не конфликтовать с вводом.
-		fmt.Printf("\n[BROADCAST | %s] (%s): %s\n",
+		fmt.Printf("\n[BROADCAST | %s] (%s): %s",
 			bPayload.SenderName,
 			time.Unix(bPayload.Timestamp, 0).Format("15:04:05"),
 			bPayload.Text)
@@ -465,6 +465,8 @@ PROCESS_PENDING_PRIVATE_CHAT:
 		app.state.CurrentChatID = ""
 		app.state.CurrentChatTargetUserID = ""
 		app.state.CurrentChatTargetDisplayName = ""
+	} else if chatInput == "[[update]]" {
+		// Ничего не делаем
 	} else if chatInput != "" {
 		payload := protocol.SendPrivateMessageRequestPayload{
 			TargetUserID: app.state.CurrentChatTargetUserID,
@@ -516,6 +518,8 @@ PROCESS_PENDING_GLOBAL_CHAT:
 
 	if chatInput == "[[back]]" {
 		app.state.Current = StateMainMenu
+	} else if chatInput == "[[update]]" {
+		// Ничего не делаем, этот State снова будет
 	} else if chatInput != "" {
 		payload := protocol.TextPayload{Text: chatInput}
 		err := sendMessageToServer(app.conn, protocol.MsgTypeText, payload)

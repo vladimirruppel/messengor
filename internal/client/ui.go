@@ -19,9 +19,9 @@ func displayMainMenu(displayName string, userID string) {
 	fmt.Println("\n--- Main Menu ---")
 	fmt.Printf("Logged in as: %s (ID: %s)\n", displayName, userID)
 	fmt.Println("1. Enter Global Chat (Broadcast)")
-	fmt.Println("2. Start Private Chat") // Новая опция
+	fmt.Println("2. Start Private Chat")
 	fmt.Println("3. Logout")
-	fmt.Println("4. Exit") // Сдвигаем Exit
+	fmt.Println("4. Exit")
 	fmt.Print("Choose an option: ")
 }
 
