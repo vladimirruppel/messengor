@@ -40,7 +40,6 @@ func (app *ClientApp) Run() {
 	if err != nil {
 		log.Fatalf("Failed to connect: %v", err)
 	}
-	defer app.conn.Close()
 
 	log.Println("WebSocket connection established successfully!")
 
@@ -51,27 +50,29 @@ func (app *ClientApp) Run() {
 	interruptChan := make(chan os.Signal, 1)
 	signal.Notify(interruptChan, os.Interrupt, syscall.SIGTERM) // syscall.SIGTERM для Linux/macOS
 
+	// Обработка сигналов завершения
 	running := true
 	for running {
-		// Проверяем, не пришел ли сигнал на завершение или сообщение о закрытии соединения
 		select {
-		case <-app.shutdownChan: // Если readFromServer сигнализирует о проблеме с соединением
-			log.Println("Connection lost or shutdown signal received from reader. Exiting...")
+		case <-app.shutdownChan:
+			log.Println("ClientApp.Run: Shutdown signal received from reader goroutine. Exiting loop...")
 			running = false
-			continue // Выходим из select и затем из for
-		case <-interruptChan: // Пользователь нажал Ctrl+C
-			log.Println("Interrupt signal received. Exiting...")
+			continue // Переходим к проверке running и выходу из цикла
+		case <-interruptChan:
+			log.Println("ClientApp.Run: Interrupt signal (Ctrl+C) received. Exiting loop...")
 			running = false
-			continue
+			continue // Переходим к проверке running и выходу из цикла
 		default:
-			// Неблокирующая проверка, если нет других событий, продолжаем работу UI
+			// Нет сигналов на завершение, продолжаем.
 		}
 
-		if !running { // Двойная проверка на случай, если мы вышли из select по сигналу
+		if !running {
 			break
 		}
 
-		app.processCurrentState() // функция для обработки UI и логики состояний
+		// Вся логика UI, обработки пользовательского ввода и обработки сообщений от сервера
+		// для текущего состояния инкапсулирована здесь
+		app.processCurrentState()
 	}
 
 	// Попытка корректного закрытия соединения
@@ -92,16 +93,16 @@ func (app *ClientApp) processCurrentState() {
 	case StateUnauthenticated:
 		handleUnauthenticatedState(app)
 	case StateAuthenticating:
-		handleAuthenticatingState(app) // Этот обработчик должен читать из app.state.ServerResponses
-	case StateMainMenu: // Новое имя
+		handleAuthenticatingState(app)
+	case StateMainMenu:
 		handleMainMenuState(app)
-	case StateFetchingUserList: // Новое состояние
+	case StateFetchingUserList:
 		handleFetchingUserListState(app)
-	case StateUserSelectionForPrivateChat: // Новое состояние
+	case StateUserSelectionForPrivateChat:
 		handleUserSelectionForPrivateChatState(app)
-	case StateInChat: // Это теперь для Global Chat
-		handleGlobalChatState(app) // Новый обработчик для глобального чата
-	case StateInPrivateChat: // Новое состояние
+	case StateInChat: // Global Chat
+		handleGlobalChatState(app)
+	case StateInPrivateChat:
 		handleInPrivateChatState(app)
 	default:
 		log.Printf("Unknown client state: %s. Resetting to Unauthenticated.\n", app.state.Current)

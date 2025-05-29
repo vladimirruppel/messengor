@@ -203,18 +203,10 @@ func sendWebSocketResponse(conn *websocket.Conn, msgType string, payloadData int
 
 // Вспомогательная функция для отправки сообщений об ошибках клиенту
 func sendErrorMessage(conn *websocket.Conn, errorCode string, errorMessage string) {
-	// errorPayload := protocol.ErrorPayload{ // Предполагается, что у вас есть ErrorPayload в protocol
-	// 	ErrorCode:    errorCode,
-	// 	ErrorMessage: errorMessage,
-	// }
-	// Можно создать специальный тип сообщения для ошибок или использовать существующий
-	// для ответа, но с флагом ошибки. Для простоты пока используем специальный тип,
-	// которого у нас еще нет, или просто логируем и не отправляем.
-	// Либо, если ErrorPayload используется в Register/LoginResponse, то тип ответа остается тот же.
-
-	// Для универсальности, давайте предположим, что у нас есть общий тип S2C_ERROR_NOTIFY
-	// sendWebSocketResponse(conn, protocol.MsgTypeErrorNotify, errorPayload)
-	// Поскольку у нас нет такого типа, пока просто залогируем, что надо бы отправить.
-	log.Printf("Should send error to client: Code=%s, Message=%s\n", errorCode, errorMessage)
-	// В реальном приложении здесь был бы вызов sendWebSocketResponse с соответствующим типом.
+    payload := protocol.ErrorPayload{
+        ErrorCode:    errorCode,
+        ErrorMessage: errorMessage,
+    }
+    log.Printf("Sending error to client: Code=%s, Message=%s\n", errorCode, errorMessage)
+    sendWebSocketResponse(conn, protocol.MsgTypeErrorNotify, payload) // Используем новый тип
 }

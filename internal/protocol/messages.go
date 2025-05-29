@@ -20,6 +20,7 @@ const (
 	MsgTypeUserListResponse          = "USER_LIST_RESPONSE"           // S->C: Ответ со списком пользователей
 	MsgTypeSendPrivateMessageRequest = "SEND_PRIVATE_MESSAGE_REQUEST" // C->S: Отправка личного сообщения
 	MsgTypeNewPrivateMessageNotify   = "NEW_PRIVATE_MESSAGE_NOTIFY"   // S->C: Уведомление о новом личном сообщении (обоим участникам)
+	MsgTypeErrorNotify               = "ERROR_NOTIFY"
 )
 
 ///
@@ -101,11 +102,11 @@ type SendPrivateMessageRequestPayload struct {
 // NewPrivateMessageNotifyPayload содержит данные нового личного сообщения.
 // Отправляется и получателю, и отправителю (для синхронизации UI).
 type NewPrivateMessageNotifyPayload struct {
-	ChatID       string `json:"chat_id"`        // Уникальный ID для этой личной беседы (например, user1ID:user2ID)
-	SenderID     string `json:"sender_id"`    // ID отправителя
-	SenderName   string `json:"sender_name"`  // Имя отправителя
-	ReceiverID   string `json:"receiver_id"`  // ID получателя (полезно для клиента, чтобы понять, это ему или от него)
-	Text         string `json:"text"`
-	Timestamp    int64  `json:"timestamp"`    // Unix time
+	ChatID     string `json:"chat_id"`     // Уникальный ID для этой личной беседы (например, user1ID:user2ID)
+	SenderID   string `json:"sender_id"`   // ID отправителя
+	SenderName string `json:"sender_name"` // Имя отправителя
+	ReceiverID string `json:"receiver_id"` // ID получателя (полезно для клиента, чтобы понять, это ему или от него)
+	Text       string `json:"text"`
+	Timestamp  int64  `json:"timestamp"` // Unix time
 	// ServerMessageID string `json:"server_message_id"` // ID сообщения на сервере, для истории и т.д.
 }
