@@ -1,9 +1,216 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="AnPfhRRfJ8Vre6uEmrvF">
-    <mxGraphModel>
+    <mxGraphModel dx="1678" dy="914" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-1" value="&lt;div style=&quot;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;MainApplication (cmd&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: start;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;/server)&lt;/span&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&amp;lt;&amp;lt;EntryPoint&amp;gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="35" width="290" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-2" value="+ addr: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-1">
+          <mxGeometry y="50" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-1">
+          <mxGeometry y="80" width="290" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-4" value="&lt;div&gt;+ main()&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-1">
+          <mxGeometry y="88" width="290" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-5" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;Hub (inernal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="275" width="400" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-6" value="&lt;div&gt;- clients: map[*Client]bool&lt;/div&gt;&lt;div&gt;- broadcast: chan []byte&lt;/div&gt;&lt;div&gt;- register: chan *&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Client&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- unregister: chan *&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Client&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- clientsMutex: sync.RWMutex&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-5">
+          <mxGeometry y="26" width="400" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-5">
+          <mxGeometry y="110" width="400" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-8" value="&lt;div&gt;+ NewHub() *Hub&lt;/div&gt;&lt;div&gt;+ Run()&lt;/div&gt;&lt;div&gt;+ GetAuthenticatedUsersInfo(excludeUserID string) []protocol.UserInfo&lt;/div&gt;&lt;div&gt;+ FindClientByUserID(userID string) (*Client, bool)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-5">
+          <mxGeometry y="118" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-21" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.497;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-4" target="BHGn1KFHYBxR2rlhBs1O-5">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="360" y="-45" as="sourcePoint" />
+            <mxPoint x="520" y="-45" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-22" value="&lt;span style=&quot;color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: left; text-wrap-mode: wrap;&quot;&gt;creates &amp;amp; runs&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="BHGn1KFHYBxR2rlhBs1O-21">
+          <mxGeometry x="-0.0687" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-23" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;Client (internal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="275" width="400" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-24" value="&lt;div&gt;- hub: *Hub&lt;/div&gt;&lt;div&gt;- conn: *websocket.Conn&lt;/div&gt;&lt;div&gt;- send: chan []byte&lt;/div&gt;&lt;div&gt;+ UserID: string&lt;/div&gt;&lt;div&gt;+ DisplayName: string&lt;/div&gt;&lt;div&gt;+ IsAuthenticated: bool&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-23">
+          <mxGeometry y="26" width="400" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-25" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-23">
+          <mxGeometry y="120" width="400" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-26" value="&lt;div&gt;+ readPump()&lt;/div&gt;&lt;div&gt;+ writePump()&lt;/div&gt;&lt;div&gt;+ sendResponse(msgType string, payloadData interface{})&lt;/div&gt;&lt;div&gt;+ sendError(errorCode string, errorMessage string)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-23">
+          <mxGeometry y="128" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-27" value="" style="endArrow=diamondThin;endFill=0;endSize=24;html=1;rounded=0;entryX=1.005;entryY=0.084;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.002;exitY=0.085;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-23" target="BHGn1KFHYBxR2rlhBs1O-5">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="640" y="305" as="sourcePoint" />
+            <mxPoint x="770" y="65" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-32" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;AuthStore&lt;/span&gt;&lt;/strong&gt;(internal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="535" width="420" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-33" value="&lt;div&gt;# userStore: map[string]*User&lt;/div&gt;&lt;div&gt;# userStoreMutex: sync.RWMutex&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-32">
+          <mxGeometry y="30" width="420" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-34" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-32">
+          <mxGeometry y="70" width="420" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-35" value="&lt;div&gt;+ RegisterNewUser(username, password, displayName string) (*User, error)&lt;/div&gt;&lt;div&gt;+ AuthenticateUser(username, password string) (*User, error)&lt;/div&gt;&lt;div&gt;+ GetUserByID(userID string) (*User, bool)&lt;/div&gt;&lt;div&gt;+ loadUsersFromFile() error&lt;/div&gt;&lt;div&gt;+ saveUsersToFile() error&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-32">
+          <mxGeometry y="78" width="420" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-36" value="protocol" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="95" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-38" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.84;exitY=-0.011;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=50;entryPerimeter=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-5" target="BHGn1KFHYBxR2rlhBs1O-36">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="530" y="175" as="sourcePoint" />
+            <mxPoint x="690" y="175" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-39" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-23">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="890" y="75" as="sourcePoint" />
+            <mxPoint x="1150" y="145" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-40" value="via channels" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=1.01;exitY=0.333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.003;entryY=0.298;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-6" target="BHGn1KFHYBxR2rlhBs1O-24">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="950" y="303" as="sourcePoint" />
+            <mxPoint x="1064" y="165" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-41" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;User&lt;/span&gt;&lt;/strong&gt;(internal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="535" width="190" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-42" value="&lt;div&gt;+ ID: string&lt;/div&gt;&lt;div&gt;+ Username: string&lt;/div&gt;&lt;div&gt;- PasswordHash: string&lt;/div&gt;&lt;div&gt;+ DisplayName: string&lt;/div&gt;&lt;div&gt;+ CreatedAt: time.Time&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-41">
+          <mxGeometry y="30" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-43" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-41">
+          <mxGeometry y="110" width="190" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-45" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0;exitY=0.076;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.005;entryY=0.102;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-32" target="BHGn1KFHYBxR2rlhBs1O-41">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="430" y="495" as="sourcePoint" />
+            <mxPoint x="590" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-46" value="&lt;span style=&quot;color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: left; text-wrap-mode: wrap;&quot;&gt;manages&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="BHGn1KFHYBxR2rlhBs1O-45">
+          <mxGeometry x="-0.0926" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-47" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;HistoryStore&lt;/span&gt;&lt;/strong&gt;(internal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="275" width="420" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-48" value="&lt;div&gt;# historyFileMutexes: map[string]*sync.Mutex&lt;/div&gt;&lt;div&gt;# globalHistoryMutex: sync.Mutex&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-47">
+          <mxGeometry y="30" width="420" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-49" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-47">
+          <mxGeometry y="70" width="420" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-50" value="&lt;div&gt;+ SaveMessage(chatID, senderID, senderName, text string) (*protocol.StoredMessage, error)&lt;/div&gt;&lt;div&gt;+ LoadChatHistory(chatID string, limit int) ([]protocol.StoredMessage, error)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-47">
+          <mxGeometry y="78" width="420" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-51" value="&lt;span style=&quot;color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: left; text-wrap-mode: wrap;&quot;&gt;creates/retrieves&lt;/span&gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=70;entryDy=32;entryPerimeter=0;edgeStyle=elbowEdgeStyle;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-47" target="BHGn1KFHYBxR2rlhBs1O-36">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1320" y="445" as="sourcePoint" />
+            <mxPoint x="1480" y="445" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1370" y="415" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-52" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;ServerFunctions&lt;/span&gt;&lt;/strong&gt;(internal/server)&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="855" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-53" value="# upgrader: websocket.Upgrader" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-52">
+          <mxGeometry y="30" width="520" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-54" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-52">
+          <mxGeometry y="60" width="520" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-55" value="&lt;div&gt;+ HandleWebSocketConnections(hub *Hub, w http.ResponseWriter, r *http.Request)&lt;/div&gt;&lt;div&gt;# sendWebSocketResponse(conn *websocket.Conn, msgType string, payloadData interface{})&lt;/div&gt;&lt;div&gt;# sendErrorMessage(conn *websocket.Conn, errorCode string, errorMessage string)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-52">
+          <mxGeometry y="68" width="520" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-57" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=-0.006;exitY=0.115;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.005;entryY=0.861;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=elbowEdgeStyle;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-52" target="BHGn1KFHYBxR2rlhBs1O-8">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="370" y="895" as="sourcePoint" />
+            <mxPoint x="120" y="525" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="110" y="675" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-58" value="calls for auth" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.512;entryY=1.022;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=elbowEdgeStyle;elbow=vertical;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-52" target="BHGn1KFHYBxR2rlhBs1O-35">
+          <mxGeometry x="0.003" width="160" relative="1" as="geometry">
+            <mxPoint x="477" y="1210" as="sourcePoint" />
+            <mxPoint x="188" y="745" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-59" value="creates &amp;amp;&amp;nbsp;&lt;div&gt;registers&lt;/div&gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=1.006;exitY=0.141;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.008;entryY=0.815;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=elbowEdgeStyle;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-52" target="BHGn1KFHYBxR2rlhBs1O-26">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1260" y="825" as="sourcePoint" />
+            <mxPoint x="1420" y="825" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1120" y="665" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-60" value="processes" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=1.003;exitY=0.048;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=elbowEdgeStyle;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-53" target="BHGn1KFHYBxR2rlhBs1O-36">
+          <mxGeometry x="0.0005" width="160" relative="1" as="geometry">
+            <mxPoint x="1260" y="685" as="sourcePoint" />
+            <mxPoint x="1420" y="685" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1202" y="515" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-61" value="&lt;div style=&quot;&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; color: rgb(26, 28, 30); font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: start;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;ClientApplication&lt;/span&gt;&lt;/strong&gt;&amp;nbsp;(cmd&lt;strong style=&quot;box-sizing: border-box; font-family: &amp;quot;Google Sans Text&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 14px; text-align: start;&quot; class=&quot;ng-star-inserted&quot;&gt;&lt;span style=&quot;box-sizing: border-box; background-image: none; background-position: 0% 0%; background-size: auto; background-repeat: repeat; background-attachment: scroll; background-origin: padding-box; background-clip: border-box; border-color: rgb(255, 255, 255); border-style: solid; border-width: 1px; border-image: none 100% / 1 / 0 stretch; border-radius: 3px; font-size: 13px; padding: 0px 3px; display: inline-block; font-family: &amp;quot;DM Mono&amp;quot;, monospace;&quot; class=&quot;inline-code ng-star-inserted&quot;&gt;/client)&lt;/span&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&amp;lt;&amp;lt;ConsoleApplication&amp;gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1065" width="330" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-62" value="&lt;div&gt;# conn: *websocket.Conn&lt;/div&gt;&lt;div&gt;# mu: sync.Mutex&lt;/div&gt;&lt;div&gt;# loggedInUser: struct { ID, DisplayName, Token string }&lt;/div&gt;&lt;div&gt;# isAuthenticated: bool&lt;/div&gt;&lt;div&gt;# currentChatID: string&lt;/div&gt;&lt;div&gt;# knownUsers: map[string]protocol.UserInfo&lt;/div&gt;&lt;div&gt;# inputPrompt: string&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-61">
+          <mxGeometry y="50" width="330" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-63" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-61">
+          <mxGeometry y="160" width="330" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-64" value="&lt;div&gt;+ main()&lt;/div&gt;&lt;div&gt;# connectToServer() error&lt;/div&gt;&lt;div&gt;# listenToServer()&lt;/div&gt;&lt;div&gt;# handleUserInput()&lt;/div&gt;&lt;div&gt;# sendRequest(msgType string, payload interface{}) error&lt;/div&gt;&lt;div&gt;# generatePrivateChatIDClient(userID1, userID2 string) (string, error)&lt;/div&gt;&lt;div&gt;# updatePrompt()&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="BHGn1KFHYBxR2rlhBs1O-61">
+          <mxGeometry y="168" width="330" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-65" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=elbowEdgeStyle;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-4" target="BHGn1KFHYBxR2rlhBs1O-52">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-190" y="205" as="sourcePoint" />
+            <mxPoint x="420" y="925" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="70" y="545" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-66" value="configures HTTP handler for" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="BHGn1KFHYBxR2rlhBs1O-65">
+          <mxGeometry x="0.6424" relative="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHGn1KFHYBxR2rlhBs1O-67" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=1.008;exitY=0.098;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.001;entryY=0.131;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="BHGn1KFHYBxR2rlhBs1O-23" target="BHGn1KFHYBxR2rlhBs1O-47">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1370" y="525" as="sourcePoint" />
+            <mxPoint x="1530" y="525" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
