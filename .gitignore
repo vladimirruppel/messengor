@@ -60,3 +60,4 @@ coverage.out
 coverage.html
 
 *.json
+*.jsonl
